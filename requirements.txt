@@ -1,0 +1,6 @@
+azure-ai-projects==2.4.0
+azure-identity>=1.25,<2
+openai>=2.54,<3
+httpx>=0.28,<1
+msal>=1.39,<2
+PyJWT[crypto]>=2.15,<3

@@ -1,0 +1,32 @@
+{
+  "id": "MFG-DEMO-20261029",
+  "label": "Escenario ficticio · 29 octubre 2026 · turno de mañana",
+  "data_mode": "synthetic_snapshot",
+  "fabric_connected": false,
+  "disclaimer": "Datos sintéticos de una fábrica ficticia. Sin conexión a MES, ERP, PLC, sensores o instalaciones reales.",
+  "zones": [
+    {"id": "Z01", "name": "Mecanizado", "x": 180, "y": 170, "baseline_cycle_seconds": 100, "observed_cycle_seconds": 104, "renewable_pct": 45},
+    {"id": "Z02", "name": "Ensamblaje", "x": 450, "y": 170, "baseline_cycle_seconds": 100, "observed_cycle_seconds": 118, "renewable_pct": 38},
+    {"id": "Z03", "name": "Acabado", "x": 720, "y": 170, "baseline_cycle_seconds": 80, "observed_cycle_seconds": 82, "renewable_pct": 52},
+    {"id": "Z04", "name": "Inspección", "x": 310, "y": 380, "baseline_cycle_seconds": 70, "observed_cycle_seconds": 69, "renewable_pct": 61},
+    {"id": "Z05", "name": "Embalaje", "x": 590, "y": 380, "baseline_cycle_seconds": 90, "observed_cycle_seconds": 92, "renewable_pct": 48}
+  ],
+  "review_threshold_pct": 15,
+  "energy_comparison": {
+    "id": "ENERGIA-DEMO-01",
+    "batch_units": 1000,
+    "energy_kwh": 500,
+    "assumption": "Mismo lote de 1.000 piezas y mismo consumo energético. Se supone la misma calidad y plazo, pendientes de validación. No es un plan de producción.",
+    "plans": [
+      {"id": "A", "name": "Referencia", "window": "Ventana A", "price_eur_kwh": 0.18, "renewable_pct": 30, "service_eligible": true},
+      {"id": "B", "name": "Mayor renovable", "window": "Ventana B", "price_eur_kwh": 0.12, "renewable_pct": 70, "service_eligible": true}
+    ]
+  },
+  "sources": [
+    {"id": "DATOS-DEMO-01", "title": "Snapshot sintético de cinco líneas", "kind": "synthetic", "description": "Tiempo de ciclo observado y referencia del escenario; no son series históricas ni mediciones reales."},
+    {"id": "ENERGIA-DEMO-01", "title": "Comparación aritmética de un lote", "kind": "synthetic", "description": "1.000 piezas y 500 kWh en cada alternativa; precios ficticios y ningún ahorro verificado."},
+    {"id": "PROC-DEMO-01", "title": "PR-PROD-017 · Revisión de desviaciones de ciclo", "kind": "synthetic", "description": "Validar registro, comparabilidad y responsable. No diagnosticar averías ni modificar equipos."},
+    {"id": "PROC-DEMO-02", "title": "PR-TURNO-004 · Parte de turno", "kind": "synthetic", "description": "Borrador interno pendiente de revisión humana; sin envío ni órdenes."},
+    {"id": "PROC-DEMO-03", "title": "PR-ENER-009 · Alternativas energéticas", "kind": "synthetic", "description": "Comparar supuestos de calidad, plazo y energía antes de cualquier decisión humana."}
+  ]
+}

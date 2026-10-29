@@ -1,0 +1,38 @@
+name: manufacturing-hosted
+requiredVersions:
+  extensions:
+    azure.ai.agents: ">=1.0.0-beta.9"
+services:
+  manufacturing-hosted:
+    host: azure.ai.agent
+    project: src/langgraph-run-responses
+    language: python
+    kind: hosted
+    name: manufacturing-hosted
+    displayName: Manufacturing · Hosted + Foundry IQ
+    description: LangGraph en Foundry, cálculos deterministas y procedimientos recuperados por MCP desde Foundry IQ y AI Search.
+    startupCommand: python bootstrap.py
+    codeConfiguration:
+      runtime: python_3_13
+      entryPoint: bootstrap.py
+      dependencyResolution: remote_build
+    protocols:
+      - protocol: responses
+        version: 2.0.0
+    env:
+      AZURE_AI_PROJECT_ENDPOINT: ${AZURE_AI_PROJECT_ENDPOINT}
+      AZURE_AI_MODEL_DEPLOYMENT_NAME: ${AZURE_AI_MODEL_DEPLOYMENT_NAME}
+      TOOLBOX_NAME: ${TOOLBOX_NAME}
+      KNOWLEDGE_BASE_NAME: manufacturing-iq
+      APPLICATIONINSIGHTS_CONNECTION_STRING: ${APPLICATIONINSIGHTS_CONNECTION_STRING}
+      AZURE_EXPERIMENTAL_ENABLE_GENAI_TRACING: "true"
+      AZURE_TRACING_GEN_AI_CONTENT_RECORDING_ENABLED: "true"
+      OTEL_SERVICE_NAME: manufacturing-hosted
+      LANGSMITH_TRACING: "false"
+      OTEL_TRACES_SAMPLER: always_on
+    container:
+      resources:
+        cpu: "0.5"
+        memory: 1Gi
+infra:
+  provider: microsoft.foundry

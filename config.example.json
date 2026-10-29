@@ -1,0 +1,17 @@
+{
+  "subscription": "YOUR_SUBSCRIPTION_ID",
+  "tenant": "YOUR_TENANT_ID",
+  "region": "swedencentral",
+  "resource_group": "YOUR_RESOURCE_GROUP",
+  "account": "YOUR_FOUNDRY_ACCOUNT",
+  "project": "YOUR_FOUNDRY_PROJECT",
+  "model": "YOUR_MODEL_DEPLOYMENT",
+  "agent": "manufacturing-hosted",
+  "search": "YOUR_SEARCH_SERVICE",
+  "search_region": "YOUR_SEARCH_REGION",
+  "index": "manufacturing-procedimientos",
+  "knowledge_source": "manufacturing-procedimientos-ks",
+  "knowledge_base": "manufacturing-iq",
+  "toolbox": "manufacturing-tools",
+  "insights": "YOUR_APPLICATION_INSIGHTS"
+}

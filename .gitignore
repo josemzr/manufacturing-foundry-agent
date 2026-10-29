@@ -1,0 +1,11 @@
+.azure/
+.venv/
+__pycache__/
+*.pyc
+.env
+.env.*
+!.env.example
+config.json
+results/
+node_modules/
+.DS_Store

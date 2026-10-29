@@ -1,0 +1,12 @@
+*
+!Dockerfile
+!requirements.txt
+!server.py
+!foundry.py
+!domain.py
+!auth.py
+!config.example.json
+!web/
+!web/**
+!data/
+!data/scenario.json

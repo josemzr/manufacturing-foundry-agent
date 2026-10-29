@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <script>
+    (() => {
+      const param = new URLSearchParams(window.location.search).get("clawpilotTheme");
+      const theme =
+        param || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      document.documentElement.setAttribute("data-theme", theme);
+    })();
+  </script>
+  <title>Manufacturing · Centro de producción</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <a class="brand" href="/" aria-label="Inicio Manufacturing"><span class="brand-icon">≋</span><span>MANUFACTURING<small>PRODUCCIÓN · ENERGÍA · CALIDAD</small></span></a>
+      <p class="nav-label">ESPACIO DE TRABAJO</p>
+      <nav aria-label="Recorrido de la demo">
+        <button class="step active" data-action="overview"><span>01</span><div>Producción<small>Estado de las líneas</small></div></button>
+        <button class="step" data-action="energy"><span>02</span><div>Energía<small>Comparar alternativas</small></div></button>
+        <button class="step" data-action="procedure"><span>03</span><div>Procedimientos<small>Consulta documental</small></div></button>
+        <button class="step" data-action="brief"><span>04</span><div>Parte de turno<small>Resumen para el equipo</small></div></button>
+      </nav>
+      <div class="bridge"><small>ÁMBITO DE SUPERVISIÓN</small><strong>Planta industrial</strong><p>Producción, energía y seguimiento del turno.</p><span class="pill">Solo lectura</span></div>
+      <div class="sidebar-bottom"><span class="status-dot"></span>Agente con herramientas de lectura<p>Sin control de instalaciones</p></div>
+    </aside>
+    <main>
+      <header class="topbar"><span>Manufacturing / Planta de demostración</span><div><span class="pill warning">Entorno de demostración · datos sintéticos</span><button id="theme-toggle" class="small-button" aria-label="Cambiar tema claro u oscuro">◐ Tema</button></div></header>
+      <section class="hero">
+        <div><div class="eyebrow">PRODUCCIÓN · ENERGÍA · SEGUIMIENTO</div><h1>Centro de <em>producción.</em></h1><p>Un asistente para preparar el siguiente turno.</p></div>
+        <div class="hero-note"><span class="status-dot"></span>Hosted agent · MCP · Foundry IQ<strong id="project-name">Cargando agente…</strong><small>Sweden Central · inferencia Data Zone UE</small></div>
+      </section>
+      <section class="metrics" aria-label="Indicadores del escenario ficticio">
+        <article><small>TIEMPO DE CICLO MEDIO</small><strong id="total-flow">—</strong><span>s/pieza · media de cinco líneas</span></article>
+        <article><small>LÍNEAS POR REVISAR</small><strong id="review-count">—</strong><span>Comprobación pendiente</span></article>
+        <article><small>ALTERNATIVA RENOVABLE</small><strong id="renewable-delta">— <b>pp</b></strong><span>Comparativa de ventanas A y B</span></article>
+        <article><small>ESTADO DE VALIDACIÓN</small><strong class="human">Pendiente</strong><span>Revisión del responsable de turno</span></article>
+      </section>
+      <div id="load-error" class="error hidden" role="alert"></div>
+      <div class="workspace">
+        <section class="visual-panel card">
+          <div class="panel-heading"><div><span class="eyebrow" id="panel-eyebrow">01 / PRODUCCIÓN</span><h2 id="panel-title">Estado de las líneas</h2></div><span class="pill">Turno de mañana</span></div>
+          <div id="map-view">
+            <div class="map-wrap">
+              <svg id="city-map" viewBox="0 0 900 540" role="img" aria-label="Plano esquemático de cinco líneas de producción ficticias. Selección mediante los botones inferiores.">
+                <defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" class="grid-line"/></pattern></defs>
+                <rect width="900" height="540" class="map-land"/><rect width="900" height="540" fill="url(#grid)"/>
+                <rect x="65" y="80" width="770" height="410" rx="18" class="factory-outline"/>
+                <path d="M 180 280 H 720 M 450 280 V 300 M 310 300 H 590" class="roads"/>
+                <rect x="95" y="100" width="170" height="145" rx="12" class="factory-cell"/>
+                <rect x="365" y="100" width="170" height="145" rx="12" class="factory-cell"/>
+                <rect x="635" y="100" width="170" height="145" rx="12" class="factory-cell"/>
+                <rect x="225" y="310" width="170" height="145" rx="12" class="factory-cell"/>
+                <rect x="505" y="310" width="170" height="145" rx="12" class="factory-cell"/>
+                <text x="65" y="55" class="map-label">PLANTA DE DEMOSTRACIÓN</text>
+                <g id="map-points"></g>
+              </svg>
+              <div class="map-badge">Plano esquemático · sin activos reales</div>
+              <div class="map-legend"><span><i class="legend-dot review"></i>Revisar dato</span><span><i class="legend-dot neutral"></i>Sin señal destacada</span></div>
+            </div>
+            <div id="zone-buttons" class="zone-buttons" aria-label="Seleccionar línea"></div>
+            <div class="zone-detail"><div><span class="eyebrow" id="zone-id">Z02 / SELECCIÓN</span><h3 id="zone-name">Ensamblaje</h3><p id="zone-status">Una observación no es un diagnóstico.</p></div><div class="deviation"><strong id="zone-deviation">+18 %</strong><small>tiempo de ciclo frente a la referencia</small></div></div>
+            <div class="comparison-bars"><div><span>Referencia</span><div class="bar-track"><div id="baseline-bar" class="bar reference"></div></div><b id="baseline-value">100 s/pieza</b></div><div><span>Observado</span><div class="bar-track"><div id="observed-bar" class="bar observed"></div></div><b id="observed-value">118 s/pieza</b></div></div>
+          </div>
+          <div id="energy-view" class="hidden">
+            <p class="section-intro">Comparativa para el mismo lote de producción.<br><strong>1.000 piezas · 500 kWh en ambas alternativas.</strong></p>
+            <div id="energy-plans" class="energy-plans"></div>
+            <div class="energy-delta"><div><small>DIFERENCIA ILUSTRATIVA</small><strong id="cost-delta">—</strong></div><div><small>CAMBIO DE ORIGEN</small><strong id="energy-renewable-delta">—</strong></div></div>
+            <p class="footnote">Mismas 1.000 piezas y 500 kWh. Sin ahorro de kWh. Calidad, plazo y capacidad son supuestos pendientes de validación. No es un plan de producción.</p>
+          </div>
+          <div id="brief-view" class="hidden">
+            <div class="brief-illustration"><span>↗</span><p>Parte de turno</p></div>
+            <ol class="brief-list"><li><span>01</span><div><strong>Situación</strong><p>Observaciones y referencias del turno.</p></div></li><li><span>02</span><div><strong>Comprobaciones</strong><p>Validaciones pendientes y cuestiones abiertas.</p></div></li><li><span>03</span><div><strong>Seguimiento</strong><p>Resumen preparado para el responsable.</p></div></li></ol>
+            <span class="approval">Pendiente de revisión humana</span>
+          </div>
+          <div id="procedure-view" class="hidden">
+            <div class="procedure-card"><span class="eyebrow">BIBLIOTECA DE OPERACIONES</span><h3>Revisión de desviaciones del tiempo de ciclo</h3><p>Consulta el procedimiento aplicable y las comprobaciones pendientes.</p><span class="pill">Foundry IQ · Azure AI Search</span></div>
+            <div class="procedure-evidence"><small>DOCUMENTO RECUPERADO</small><strong id="procedure-document">Aún no consultado</strong><p id="procedure-origin">Pulsa Preguntar a Foundry para consultar la biblioteca.</p><details><summary>Ver fragmento recuperado</summary><pre id="procedure-excerpt">Sin evidencia recuperada todavía.</pre></details></div>
+          </div>
+          <div class="provenance"><span>ORIGEN DEL CONTEXTO</span><p id="snapshot-label">Snapshot de demostración</p><small>Laboratorio autónomo con datos ficticios. Sin conexión a sistemas del cliente.</small></div>
+        </section>
+        <section class="assistant-panel card" aria-label="Asistente de Foundry">
+          <div class="assistant-heading"><span class="assistant-mark">✦</span><div><h2>Asistente de producción</h2><p>Microsoft Foundry</p></div><span id="live-status" class="pill">Disponible</span></div>
+          <div class="assistant-body">
+            <div class="question-preview"><small>CONSULTA</small><p id="question-text">¿Qué líneas necesitan revisión este turno?</p></div>
+            <label class="field-label" for="extra-question">Añade un matiz <span>(opcional, sin datos personales)</span></label>
+            <textarea id="extra-question" maxlength="1200" rows="2" placeholder="Por ejemplo: separa observación, hipótesis y comprobaciones."></textarea>
+            <button id="ask-button" class="primary-button" disabled><span id="ask-text">Preguntar a Foundry</span><span>↗</span></button>
+            <div id="progress" class="progress hidden" role="status"><span class="spinner"></span><div>Consultando el agente y sus herramientas…<small>Las respuestas son en vivo. Puede tardar unos segundos.</small></div></div>
+            <div id="answer-error" class="error hidden" role="alert"></div>
+            <div id="answer-empty" class="answer-empty"><span>≋</span><h3>¿Qué quieres revisar?</h3><p>Consulta una línea, compara alternativas de energía o prepara el parte de turno.</p></div>
+            <article id="answer-panel" class="hidden" aria-live="polite"><div id="answer-scope" class="answer-scope"></div><div id="answer" class="answer"></div><div class="answer-review">Borrador · pendiente de revisión humana</div><div id="tool-chips" class="tool-chips"></div><details><summary>Ver evidencia y recorrido</summary><p class="trace-caption">App → hosted agent en Foundry → MCP → Foundry IQ → AI Search. Los cálculos se ejecutan en el hosted; los procedimientos se recuperan de Search.</p><dl><dt>Agente</dt><dd id="result-agent"></dd><dt>Trace ID</dt><dd id="trace-id"></dd><dt>Respuesta</dt><dd id="response-id"></dd><dt>Origen</dt><dd>Datos sintéticos · procedimientos en Foundry IQ</dd></dl><button id="copy-trace-id" class="small-button">Copiar Trace ID completo</button> <button id="copy-id" class="small-button">Copiar ID de respuesta</button><p id="copy-status" role="status"></p></details><div id="sources" class="source-list"></div></article>
+          </div>
+          <div class="assistant-footer">Solo lectura. Sin maniobras, correos ni decisiones automáticas.</div>
+        </section>
+      </div>
+      <footer class="page-footer"><p>Manufacturing · Escenario ficticio de demostración.</p><p>Sin conexión a MES, ERP, PLC ni maquinaria. Solo lectura y revisión humana.</p></footer>
+    </main>
+  </div>
+</body>
+</html>
